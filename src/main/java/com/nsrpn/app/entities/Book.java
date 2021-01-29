@@ -1,15 +1,11 @@
 package com.nsrpn.app.entities;
 
-import com.nsrpn.app.utils.Consts;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "Books")
-@NamedQuery(name = "Book." + Consts.Queries.getAll, query = "select b FROM Book b")
 public class Book extends BaseEntity {
 
   @Column

@@ -26,7 +26,6 @@ public class LoginController {
   @GetMapping
   public String login(Model model) {
     String form;
-    logger.info("GET /login returns login_page.html");
     if (model.containsAttribute("register")) {
       model.addAttribute("isNew", "1");
       model.addAttribute("loginEdit", new LoginEdit());
@@ -35,6 +34,7 @@ public class LoginController {
       model.addAttribute("loginForm", new LoginForm());
       form = "login";
     }
+    logger.info("GET returns " + form);
     return form;
   }
 

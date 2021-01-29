@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.lang.reflect.Field;
 
 @MappedSuperclass
-public abstract class BaseEntity {
+public class BaseEntity {
   @Id
   @GeneratedValue
   private Long id;

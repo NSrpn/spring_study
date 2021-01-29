@@ -1,12 +1,10 @@
 package com.nsrpn.app.services;
 
-import com.nsrpn.app.entities.Book;
 import com.nsrpn.app.entities.User;
 import com.nsrpn.app.storage.IStorage;
 import com.nsrpn.web.forms.LoginEdit;
 import com.nsrpn.web.forms.LoginForm;
 import org.apache.log4j.Logger;
-import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -37,9 +35,6 @@ public class LoginService {
 
   private Logger logger = Logger.getLogger(LoginService.class);
 
-  @Autowired
-  private SessionFactory sessionFactory;
-
   private final IStorage<User> userRepo;
 
   @Autowired
@@ -57,7 +52,7 @@ public class LoginService {
     u.setTitle(loginEdit.getTitle());
     u.setUserName(loginEdit.getUsername());
     u.setPwd(loginEdit.getPassword());
-    userRepo.save(sessionFactory, u);
+    userRepo.save(u);
     return true;
   }
 }

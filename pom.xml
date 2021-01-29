@@ -18,7 +18,7 @@
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
     <spring.version>4.3.1.RELEASE</spring.version>
-    <jetty.version>9.2.19.v20160908</jetty.version>
+    <jetty.version>9.4.35.v20201120</jetty.version>
   </properties>
 
   <dependencies>
@@ -104,11 +104,11 @@
         <plugin>
           <groupId>org.eclipse.jetty</groupId>
           <artifactId>jetty-maven-plugin</artifactId>
-          <version>9.3.9.v20160517</version>
+          <version>${jetty.version}</version>
           <configuration>
             <scanIntervalSeconds>2</scanIntervalSeconds>
             <webApp>
-              <contextPath>/study-mvc</contextPath>
+              <contextPath>/login</contextPath>
             </webApp>
           </configuration>
         </plugin>

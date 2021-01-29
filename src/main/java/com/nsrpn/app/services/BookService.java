@@ -2,7 +2,6 @@ package com.nsrpn.app.services;
 
 import com.nsrpn.app.entities.Book;
 import com.nsrpn.app.storage.IStorage;
-import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,9 +23,6 @@ import java.util.List;
 @Service
 public class BookService {
 
-  @Autowired
-  private SessionFactory sessionFactory;
-
   private final IStorage<Book> bookRepo;
 
   @Autowired
@@ -35,11 +31,11 @@ public class BookService {
   }
 
   public List<Book> getAllBooks() {
-    return bookRepo.get();
+    return bookRepo.getAll();
   }
 
   public void saveBook(Book book) {
-    bookRepo.save(sessionFactory, book);
+    bookRepo.save(book);
   }
 
   public boolean removeBookById(Integer bookIdToRemove) {

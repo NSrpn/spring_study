@@ -10,7 +10,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name="UserBooks")
 @NamedQuery(name = "UserBook." + Consts.Queries.getAll, query = "select ub FROM UserBook ub")
-public class UserBook extends BaseEntity{
+public class UserBook extends BaseEntity {
 
   @Column
   private User user;
