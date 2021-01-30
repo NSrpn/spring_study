@@ -2,6 +2,7 @@ package com.nsrpn.app.services;
 
 import com.nsrpn.app.entities.User;
 import com.nsrpn.app.storage.IStorage;
+import com.nsrpn.app.storage.UserStorage;
 import com.nsrpn.web.forms.LoginEdit;
 import com.nsrpn.web.forms.LoginForm;
 import org.apache.log4j.Logger;
@@ -44,7 +45,8 @@ public class LoginService {
 
   public boolean authenticate(LoginForm loginForm) {
     logger.info("try auth with user-form: " + loginForm);
-    return loginForm.getUsername().equals("root") && loginForm.getPassword().equals("123");
+    User u = ((UserStorage)userRepo).getByUserName(loginForm.getUsername());
+    return (u != null) && u.getPwd().equals(loginForm.getPassword());
   }
 
   public boolean register(LoginEdit loginEdit) {

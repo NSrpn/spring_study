@@ -1,6 +1,6 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <title>Book shelf login</title>
+  <title>Login</title>
   <meta charset="UTF-8">
   <style>
     #login_form {
@@ -25,7 +25,7 @@
       <input class="login_item" type="password" placeholder="password" th:field="*{password}">
       <br/>
       <input class="login_item" type="submit" value="login">
-      <a href="/login?register">Register<a>
+      <a href="/login/register">Register<a>
     </form>
   </div>
 </body>

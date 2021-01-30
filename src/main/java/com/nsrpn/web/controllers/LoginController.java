@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping(value = "/login")
+@RequestMapping(value="/login")
 public class LoginController {
 
   private final Logger logger = Logger.getLogger(LoginController.class);
@@ -26,14 +26,17 @@ public class LoginController {
   @GetMapping
   public String login(Model model) {
     String form;
-    if (model.containsAttribute("register")) {
-      model.addAttribute("isNew", "1");
-      model.addAttribute("loginEdit", new LoginEdit());
-      form = "loginEdit";
-    } else {
-      model.addAttribute("loginForm", new LoginForm());
-      form = "login";
-    }
+    model.addAttribute("loginForm", new LoginForm());
+    form = "login";
+    logger.info("GET returns " + form);
+    return form;
+  }
+
+  @GetMapping("/register")
+  public String register(Model model) {
+    model.addAttribute("isNew", "1");
+    model.addAttribute("loginEdit", new LoginEdit());
+    String form = "loginEdit";
     logger.info("GET returns " + form);
     return form;
   }

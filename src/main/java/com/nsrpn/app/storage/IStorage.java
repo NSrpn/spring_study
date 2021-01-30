@@ -11,19 +11,27 @@ public interface IStorage<T extends BaseEntity> {
 
   default List<T> getAll() {
     Session session = StorageFactory.getSessionFactory().openSession();
-    return (List<T>) session.createQuery(getAllQuery()).list();
+    List<T> res = (List<T>) session.createQuery(getAllQuery()).list();
+    session.close();
+    return res;
   }
 
   default boolean save(T obj) {
     Session session = StorageFactory.getSessionFactory().openSession();
+    session.beginTransaction();
     session.save(obj);
+    session.getTransaction().commit();
+    session.close();
     return true;
   }
 
   default boolean remove(List<T> objs) {
     Session session = StorageFactory.getSessionFactory().openSession();
+    session.beginTransaction();
     for (T obj : objs)
       session.delete(obj);
+    session.getTransaction().commit();
+    session.close();
     return true;
   }
 

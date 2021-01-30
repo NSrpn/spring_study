@@ -1,6 +1,6 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <title>Book shelf login</title>
+  <title>User edit</title>
   <meta charset="UTF-8">
   <style>
     #login_form {
@@ -18,7 +18,7 @@
 <body>
   <div id="login_edit">
     <form method="post" th:action="@{/login/register}" th:object="${loginEdit}">
-      <img class="login_item" th:src="@{/images/user_64.png}"> <p th:text="Register user!" />
+      <img class="login_item" th:src="@{/images/user_64.png}"> <p>Register user!</p>
       <br/>
       <input class="login_item" type="text" placeholder="Title" th:field="*{title}">
       <br/>
@@ -26,7 +26,7 @@
       <br/>
       <input class="login_item" type="password" placeholder="Password" th:field="*{password}">
       <br/>
-      <input class="login_item" type="submit" value="login">
+      <input class="login_item" type="submit" value="Сохранить">
     </form>
   </div>
 </body>

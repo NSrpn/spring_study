@@ -9,7 +9,7 @@ public class BaseEntity {
   @GeneratedValue
   private Long id;
 
-  @Column
+  @Column(nullable = false)
   private String title;
 
   public BaseEntity() {

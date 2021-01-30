@@ -2,19 +2,20 @@ package com.nsrpn.app.entities;
 
 import com.nsrpn.app.utils.Consts;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.NamedQuery;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Table(name="UserBooks")
 @NamedQuery(name = "UserBook." + Consts.Queries.getAll, query = "select ub FROM UserBook ub")
 public class UserBook extends BaseEntity {
 
-  @Column
+  @ManyToOne
+  @JoinColumn(name = "user_id", nullable = false)
   private User user;
-  @Column
+
+  @ManyToOne
+  @JoinColumn(name = "book_id", nullable = false)
   private Book book;
 
   public UserBook(Long id, String title, User user, Book book) {
