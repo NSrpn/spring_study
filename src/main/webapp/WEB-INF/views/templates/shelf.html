@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="shelf">
+    <div style="display: none;" th:fragment="actionList">
+        <span>
+            <label th:title="#{book.action.remove}">
+                <input type="image"
+                       th:alt="#{book.action.remove}"
+                       th:src="@{/images/delete.png}"
+                       th:formaction="@{/shelf/remove?book_id=} + ${book.id}">
+            </label>
+        </span>
+    </div>
+    <div style="display: none;" th:fragment="filterActionList">
+        <span>
+            <label th:title="#{book.action.filter}">
+                <input type="image"
+                     formaction="/shelf/filter"
+                     th:src="@{/images/filter_accept.png}"
+                     th:alt="#{book.action.filter}" />
+            </label>
+        </span>
+        <span>
+            <label th:title="#{book.action.removeFiltered}">
+                <input type="image"
+                     formaction="/shelf/removeFiltered"
+                     th:src="@{/images/filter_delete.png}"
+                     th:alt="#{book.action.removeFiltered}" />
+            </label>
+        </span>
+    </div>
+    <div th:insert="templates/menu::menu" />
+    <h2 th:text="#{book.title.shelf}">Shelf</h2>
+    <div id="myBookList" class="container">
+        <div th:insert="templates/bookList::bookList" />
+    </div>
+</div>
+</body>
+</html>

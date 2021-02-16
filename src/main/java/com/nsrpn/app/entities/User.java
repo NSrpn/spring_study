@@ -3,10 +3,8 @@ package com.nsrpn.app.entities;
 import org.hibernate.annotations.NamedQueries;
 import org.hibernate.annotations.NamedQuery;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Index;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name = "Users",
@@ -15,7 +13,8 @@ import javax.persistence.Table;
        }
 )
 @NamedQueries(
-  @NamedQuery(name = "getUserByName", query="SELECT u FROM User u WHERE u.userName = :p")
+  {
+    @NamedQuery(name = "getUserByName", query = "SELECT u FROM User u WHERE u.userName = :p")}
 )
 public class User extends BaseEntity {
 

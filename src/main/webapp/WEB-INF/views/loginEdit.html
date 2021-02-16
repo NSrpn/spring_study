@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>User edit</title>
+  <style>
+    #login_form {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    .login_item {
+      margin-bottom: 10px;
+    }
+    .exc {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <div id="login_form">
+    <div th:switch="${isNew}">
+      <table>
+        <tr>
+          <td><img class="login_item" th:src="@{/images/user_64.png}"/></td>
+          <td><h2 th:case="1" th:text="#{login.title.registration}">..</h2></td>
+          <td><h2 th:case="*" th:text="#{login.title.edit}">..</h2></td>
+        </tr>
+      </table>
+    </div>
+    <br/>
+    <div id="login_edit">
+      <form method="post" th:action="@{/login/register}" th:object="${loginEdit}">
+        <table>
+          <tr>
+            <td><input class="login_item" type="text" th:placeholder="#{login.fieldname.title}" th:field="*{title}"></td>
+            <td class="exc" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">Generic Error</td>
+          </tr>
+          <tr>
+            <td><input class="login_item" type="text" th:placeholder="#{login.fieldname.user}" th:field="*{username}"></td>
+            <td class="exc" th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Generic Error</td>
+          </tr>
+          <tr>
+            <td><input class="login_item" type="password" th:placeholder="#{login.fieldname.password}" th:field="*{password}"></td>
+            <td class="exc" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Generic Error</td>
+          </tr>
+        </table>
+        <br/>
+        <input class="login_item" type="submit" th:value="#{login.action.register}">
+      </form>
+    </div>
+  </div>
+</body>
+</html>

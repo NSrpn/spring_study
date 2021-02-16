@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <div th:fragment="bookList">
+        <form method="post" th:object="${book}">
+            <table style="text-align: left;" border="1" cellpadding="2" cellspacing="2">
+                <thead>
+                <tr>
+                    <th th:text="#{book.id}">id</th>
+                    <th th:text="#{book.title}">title</th>
+                    <th th:text="#{book.author}">author</th>
+                    <th th:text="#{book.size}">size</th>
+                    <th>Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr class="flt">
+                    <td><input type="text" th:placeholder="#{book.id}" th:name="${content + 'id'}" th:value="${filter.get(content + 'id')}"/></td>
+                    <td><input type="text" th:placeholder="#{book.title}" th:name="${content + 'title'}" th:value="${filter.get(content + 'title')}" /></td>
+                    <td><input type="text" th:placeholder="#{book.author}" th:name="${content + 'author'}" th:value="${filter.get(content + 'author')}" /></td>
+                    <td/>
+                    <td><div th:include="@{'templates/' + ${content}} :: filterActionList" /></td>
+                </tr>
+                <tr th:each="book : ${bookList}">
+                    <td th:text="${book.id}"><input type="hidden" th:name="bookId" th:value="${book.id}" /></td>
+                    <td th:text="${book.title}">.</td>
+                    <td th:text="${book.author}">.</td>
+                    <td th:text="${book.size}">1</td>
+                    <td><div th:include="@{'templates/' + ${content}} :: actionList" /></td>
+                </tr>
+                </tbody>
+            </table>
+            <div th:if="${#fields.hasErrors('global')}">
+                <p class="exc" th:each="err : ${#fields.errors('global')}" th:text="${err}">Exception</p>
+                <br/>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

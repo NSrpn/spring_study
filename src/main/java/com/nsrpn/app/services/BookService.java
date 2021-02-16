@@ -1,44 +1,43 @@
 package com.nsrpn.app.services;
 
 import com.nsrpn.app.entities.Book;
+import com.nsrpn.app.storage.BookStorage;
 import com.nsrpn.app.storage.IStorage;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
-/**
- * TODO:
- * 1. Books Dict List
- * 1.1. Title
- * 1.2. Author
- * 1.3. Size
- * 1.4. Btns: Save/Delete/Close
- * 2 Main form
- * 2.1. Books List
- * 2.2. Menu: Edit user
- * 2.3. Btn: Logout
- */
+import javax.servlet.http.HttpSession;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class BookService {
 
   private final IStorage<Book> bookRepo;
 
-  @Autowired
-  public BookService(IStorage<Book> bookRepo) {
-    this.bookRepo = bookRepo;
-  }
-
-  public List<Book> getAllBooks() {
-    return bookRepo.getAll();
+  public BookService() {
+    this.bookRepo = BookStorage.getInstance();
   }
 
   public void saveBook(Book book) {
     bookRepo.save(book);
   }
 
-  public boolean removeBookById(Integer bookIdToRemove) {
-    return bookRepo.remove(null);
+  public boolean removeBookById(Long bookIdToRemove) {
+    List<Book> bookIds = ((BookStorage)bookRepo)
+                            .getAllBooks()
+                            .stream()
+                            .filter(b->b.getId().equals(bookIdToRemove))
+                            .collect(Collectors.toList());
+    bookRepo.remove(bookIds);
+    return true;
+  }
+
+  public List<Book> getFiltered(String prefix, HttpSession session) {
+    Map<String, String> attrs = (Map<String, String>)session.getAttribute("filter");
+    return ((BookStorage)bookRepo)
+              .getAllBooks()
+              .stream()
+              .filter(b -> b.matchFilter(prefix, attrs))
+              .collect(Collectors.toList());
   }
 }

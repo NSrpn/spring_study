@@ -9,28 +9,6 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-/**
- * TODO:
- * 1. Add user
- * 1.1. Add UserForm (New)
- * 1.1.1. Name (Title)
- * 1.1.2. UserName
- * 1.1.3. Pwd
- * 1.1.4. Btns: Save/Delete/Close
- * 1.2. Save User
- * 2. Auth
- * 2.1. Add Auth Form
- * 2.2. Open Books Form
- * 3. Edit user
- * 3.1. Open User form
- * 3.2. Enter Pwd
- * 3.2. Save User
- * 4. Delete User
- * 4.1. Only in User from
- * 4.2. Enter Pwd
- * 4.3. System Exit
- */
-
 @Service
 public class LoginService {
 
@@ -43,10 +21,10 @@ public class LoginService {
     this.userRepo = userRepo;
   }
 
-  public boolean authenticate(LoginForm loginForm) {
+  public Long authenticate(LoginForm loginForm) {
     logger.info("try auth with user-form: " + loginForm);
     User u = ((UserStorage)userRepo).getByUserName(loginForm.getUsername());
-    return (u != null) && u.getPwd().equals(loginForm.getPassword());
+    return (u != null) && u.getPwd().equals(loginForm.getPassword()) ? u.getId() : null;
   }
 
   public boolean register(LoginEdit loginEdit) {

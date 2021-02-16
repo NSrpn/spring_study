@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="bookDict">
+    <div style="display: none;" th:fragment="actionList">
+        <span th:unless="${#sets.isEmpty(book.users)}">
+            <label th:title="#{book.action.addToShelf}">
+                <input type="image"
+                   th:src="@{/images/add.png}"
+                   th:each="user : ${bookToUserList}"
+                   th:unless="${not #sets.contains(user.value, session.user_id)}"
+                   th:alt="#{book.action.addToShelf}"
+                   th:formaction="@{/books/addToShelf?book_id=} + ${book.id}">
+            </label>
+        </span>
+        <span th:if="${#sets.isEmpty(book.users)}">
+            <label th:title="#{book.action.addToShelf}">
+                <input type="image"
+                   th:src="@{/images/add.png}"
+                   th:alt="#{book.action.addToShelf}"
+                   th:formaction="@{/books/addToShelf?book_id=} + ${book.id}">
+            </label>
+        </span>
+        <span>
+            <label th:title="#{book.action.remove}">
+                <input type="image"
+                     th:alt="#{book.action.remove}"
+                     th:src="@{/images/delete.png}"
+                     th:formaction="@{/books/remove?book_id=} + ${book.id}" />
+            </label>
+        </span>
+    </div>
+    <div style="display: none;" th:fragment="filterActionList">
+        <span>
+            <label th:title="#{book.action.filter}">
+                <input type="image"
+                     formaction="/books/filter"
+                     th:src="@{/images/filter_accept.png}"
+                     th:alt="#{book.action.filter}" />
+            </label>
+        </span>
+        <span>
+            <label th:title="#{book.action.addToShelfFiltered}">
+                <input type="image"
+                     formaction="/books/addToShelfFiltered"
+                     th:src="@{/images/filter_add.png}"
+                     th:alt="#{book.action.addToShelfFiltered}" />
+            </label>
+        </span>
+        <span>
+            <label th:title="#{book.action.removeFiltered}">
+                <input type="image"
+                     formaction="/books/removeFiltered"
+                     th:src="@{/images/filter_delete.png}"
+                     th:alt="#{book.action.removeFiltered}" />
+            </label>
+        </span>
+    </div>
+    <div th:insert="templates/menu::menu" />
+    <h2 th:text="#{book.title.bookDict}">Shelf</h2>
+    <div id="bookList" class="container">
+        <h3 th:text="#{book.title.addToDict}"></h3>
+        <form method="post" th:action="@{/books/save}" th:object="${book}">
+            <table border="1" cellpadding="2" cellspacing="2">
+                <thead>
+                <tr>
+                    <th th:text="#{book.author}">author</th>
+                    <th th:text="#{book.title}">title</th>
+                    <th th:text="#{book.size}">size</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>
+                        <input type="text" th:placeholder="#{book.author}" th:field="*{author}"/>
+                    </td>
+                    <td>
+                        <input type="text" th:placeholder="#{book.title}" th:field="*{title}">
+                    </td>
+                    <td>
+                        <input type="text" th:placeholder="#{book.size}" th:field="*{size}">
+                    </td>
+                    <td>
+                        <input type="submit" th:value="#{book.title.addToDict}">
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </form>
+        <h3 th:text="#{book.title.bookDict}"></h3>
+        <div th:insert="templates/bookList::bookList" />
+    </div>
+</div>
+</body>
+</html>

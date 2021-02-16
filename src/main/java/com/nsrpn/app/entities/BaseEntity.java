@@ -1,15 +1,20 @@
 package com.nsrpn.app.entities;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.MappedSuperclass;
+import java.io.Serializable;
 import java.lang.reflect.Field;
+import java.util.Map;
 
 @MappedSuperclass
-public class BaseEntity {
+public class BaseEntity implements Serializable {
   @Id
   @GeneratedValue
   private Long id;
 
-  @Column(nullable = false)
+  @Column
   private String title;
 
   public BaseEntity() {
@@ -52,4 +57,7 @@ public class BaseEntity {
     return sb.toString();
   }
 
+  public boolean matchFilter(String prefix, Map<String, String> params) {
+    return true;
+  }
 }

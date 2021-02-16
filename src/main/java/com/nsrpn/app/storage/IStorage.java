@@ -2,7 +2,6 @@ package com.nsrpn.app.storage;
 
 import com.nsrpn.app.entities.BaseEntity;
 import org.hibernate.Session;
-
 import java.util.List;
 
 public interface IStorage<T extends BaseEntity> {
@@ -33,6 +32,13 @@ public interface IStorage<T extends BaseEntity> {
     session.getTransaction().commit();
     session.close();
     return true;
+  }
+
+  default T getById(Long id) {
+    Session session = StorageFactory.getSessionFactory().openSession();
+    List<T> res = (List<T>)session.createQuery(getAllQuery() + " where id = :id").setParameter("id", id).list();
+    session.close();
+    return (!res.isEmpty()) ? res.get(0) : null;
   }
 
 }
