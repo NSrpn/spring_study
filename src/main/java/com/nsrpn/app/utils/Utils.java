@@ -1,7 +1,10 @@
 package com.nsrpn.app.utils;
 
+import com.nsrpn.app.entities.Book;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.Map;
 
 public class Utils {
   public static boolean compareFieldValueWithFilter(String fltVal, String fldVal) {
@@ -18,5 +21,10 @@ public class Utils {
 
   public static  boolean checkSession(HttpSession s) {
     return (getUserIdFromSession(s) == null);
+  }
+
+  public static void setFilterToSession(String pagePrefix, HttpServletRequest rq) {
+    Map<String, String> filterList = Book.getFilter(pagePrefix, rq);
+    rq.getSession().setAttribute(Consts.Web.filterSessionName, filterList);
   }
 }

@@ -54,9 +54,9 @@ public class Book extends BaseEntity {
 
   public static Map<String, String> getFilter(String prefix, HttpServletRequest rq) {
     Map<String, String> map = new HashMap<>();
-    map.put(prefix + "id", rq != null ? rq.getParameter(prefix + "id") + "" : "");
-    map.put(prefix + "title", rq != null ? rq.getParameter(prefix + "title") + "" : "");
-    map.put(prefix + "author", rq != null ? rq.getParameter(prefix + "author") + "" : "");
+    map.put(prefix + "id", (rq != null && rq.getParameter(prefix + "id") != null) ? rq.getParameter(prefix + "id") + "" : "");
+    map.put(prefix + "title", (rq != null && rq.getParameter(prefix + "title") != null)  ? rq.getParameter(prefix + "title") + "" : "");
+    map.put(prefix + "author", (rq != null && rq.getParameter(prefix + "author") != null)  ? rq.getParameter(prefix + "author") + "" : "");
     return map;
   }
 

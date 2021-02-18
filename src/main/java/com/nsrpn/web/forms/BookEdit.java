@@ -1,5 +1,7 @@
 package com.nsrpn.web.forms;
 
+import com.nsrpn.app.entities.Book;
+
 public class BookEdit {
   private Integer id;
   private String author;
@@ -36,6 +38,10 @@ public class BookEdit {
 
   public void setSize(Integer size) {
     this.size = size;
+  }
+
+  public Book toBook() {
+    return new Book(null, getTitle(), getAuthor(), getSize());
   }
 
   @Override

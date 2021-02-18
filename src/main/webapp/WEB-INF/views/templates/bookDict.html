@@ -3,6 +3,7 @@
 <body>
 <div th:fragment="bookDict">
     <div style="display: none;" th:fragment="actionList">
+        <!-- Start add To Shelf section-->
         <span th:unless="${#sets.isEmpty(book.users)}">
             <label th:title="#{book.action.addToShelf}">
                 <input type="image"
@@ -21,6 +22,7 @@
                    th:formaction="@{/books/addToShelf?book_id=} + ${book.id}">
             </label>
         </span>
+        <!-- end add To Shelf section -->
         <span>
             <label th:title="#{book.action.remove}">
                 <input type="image"
@@ -34,7 +36,7 @@
         <span>
             <label th:title="#{book.action.filter}">
                 <input type="image"
-                     formaction="/books/filter"
+                     th:formaction="@{/books/filter}"
                      th:src="@{/images/filter_accept.png}"
                      th:alt="#{book.action.filter}" />
             </label>
@@ -42,7 +44,7 @@
         <span>
             <label th:title="#{book.action.addToShelfFiltered}">
                 <input type="image"
-                     formaction="/books/addToShelfFiltered"
+                     th:formaction="@{/books/addToShelfFiltered}"
                      th:src="@{/images/filter_add.png}"
                      th:alt="#{book.action.addToShelfFiltered}" />
             </label>
@@ -50,7 +52,7 @@
         <span>
             <label th:title="#{book.action.removeFiltered}">
                 <input type="image"
-                     formaction="/books/removeFiltered"
+                     th:formaction="@{/books/removeFiltered}"
                      th:src="@{/images/filter_delete.png}"
                      th:alt="#{book.action.removeFiltered}" />
             </label>
@@ -86,6 +88,15 @@
                 </tr>
                 </tbody>
             </table>
+            <div class="exc" th:if="${#fields.hasErrors('author')}">
+                <span th:text="#{book.author} + ': '" /><span th:errors="*{author}" />
+            </div>
+            <div class="exc" th:if="${#fields.hasErrors('title')}">
+                <span th:text="#{book.title} + ': '" /><span th:errors="*{title}" />
+            </div>
+            <div class="exc" th:if="${#fields.hasErrors('size')}">
+                <span th:text="#{book.size} + ': '" /><span th:errors="*{size}" />
+            </div>
         </form>
         <h3 th:text="#{book.title.bookDict}"></h3>
         <div th:insert="templates/bookList::bookList" />

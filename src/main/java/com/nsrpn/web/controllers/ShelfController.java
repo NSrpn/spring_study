@@ -75,11 +75,11 @@ public class ShelfController {
   @PostMapping("/removeFiltered")
   public String removeFiltered(Book Book, HttpServletRequest request) {
     if (Utils.checkSession(request)) return "redirect:/login";
-    Map<String, String> filterList = Book.getFilter(contentPage, request);
-    request.getSession().setAttribute("filter", filterList);
+    Utils.setFilterToSession(contentPage, request);
     for (UserBook ub : shelfService.getFiltered(contentPage, request.getSession())) {
       shelfService.removeBookById(ub.getUser().getId(), ub.getBook().getId());
     }
+    request.getSession().removeAttribute("filter");
     return "redirect:/shelf";
   }
 

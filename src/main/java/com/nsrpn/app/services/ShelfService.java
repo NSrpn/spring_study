@@ -5,7 +5,6 @@ import com.nsrpn.app.entities.User;
 import com.nsrpn.app.entities.UserBook;
 import com.nsrpn.app.storage.BookStorage;
 import com.nsrpn.app.storage.IStorage;
-import com.nsrpn.app.storage.ShelfStorage;
 import com.nsrpn.app.storage.UserStorage;
 import com.nsrpn.app.utils.Consts;
 import com.nsrpn.app.utils.Utils;

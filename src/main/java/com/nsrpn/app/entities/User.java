@@ -4,8 +4,6 @@ import org.hibernate.annotations.NamedQueries;
 import org.hibernate.annotations.NamedQuery;
 
 import javax.persistence.*;
-import java.util.Set;
-
 @Entity
 @Table(name = "Users",
        indexes = {
