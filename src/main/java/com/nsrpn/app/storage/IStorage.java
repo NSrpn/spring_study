@@ -18,7 +18,7 @@ public interface IStorage<T extends BaseEntity> {
   default boolean save(T obj) {
     Session session = StorageFactory.getSessionFactory().openSession();
     session.beginTransaction();
-    session.save(obj);
+    session.saveOrUpdate(obj);
     session.getTransaction().commit();
     session.close();
     return true;

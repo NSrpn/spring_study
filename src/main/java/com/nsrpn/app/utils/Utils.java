@@ -1,9 +1,11 @@
 package com.nsrpn.app.utils;
 
 import com.nsrpn.app.entities.Book;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.util.Map;
 
 public class Utils {
@@ -11,16 +13,27 @@ public class Utils {
     return (fltVal.isEmpty() || fldVal.contains(fltVal));
   }
 
-  public static Long getUserIdFromSession(HttpSession session) {
-    return (Long)session.getAttribute(Consts.Web.userSessionName);
+  public static String getUserNameFromSession() {
+    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+    if (auth != null) {
+      return ((User)auth.getPrincipal()).getUsername();
+    }
+    return null;
   }
 
-  public static boolean checkSession(HttpServletRequest rq) {
-    return checkSession(rq.getSession());
+  public static boolean checkCurrentUserAdmin() {
+    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+    if (auth != null) {
+      if (auth.getPrincipal() instanceof User) {
+        User user = (User) auth.getPrincipal();
+        return user.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+      }
+    }
+    return false;
   }
 
-  public static  boolean checkSession(HttpSession s) {
-    return (getUserIdFromSession(s) == null);
+  public static  boolean checkSession() {
+    return (getUserNameFromSession() == null);
   }
 
   public static void setFilterToSession(String pagePrefix, HttpServletRequest rq) {

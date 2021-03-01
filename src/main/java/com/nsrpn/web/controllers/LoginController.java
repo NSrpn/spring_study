@@ -1,7 +1,10 @@
 package com.nsrpn.web.controllers;
 
+import com.nsrpn.app.entities.User;
 import com.nsrpn.app.services.LoginService;
+import com.nsrpn.app.storage.UserStorage;
 import com.nsrpn.app.utils.Consts;
+import com.nsrpn.app.utils.Utils;
 import com.nsrpn.web.forms.LoginEdit;
 import com.nsrpn.web.forms.LoginForm;
 import com.nsrpn.web.validators.LoginValidator;
@@ -19,6 +22,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping(value="/login")
@@ -46,7 +50,7 @@ public class LoginController {
   }
 
   @GetMapping
-  public String login(Model model) {
+  public String login(Model model, HttpSession session) {
     model.addAttribute("loginForm", new LoginForm());
     logger.info("GET to login");
     return "login";
@@ -55,7 +59,23 @@ public class LoginController {
   @GetMapping("/register")
   public String register(Model model) {
     model.addAttribute("isNew", "1");
+    model.addAttribute("currentIsAdmin", Utils.checkCurrentUserAdmin());
     model.addAttribute("loginEdit", new LoginEdit());
+    logger.info("GET to loginEdit");
+    return "loginEdit";
+  }
+
+  @GetMapping("/edit")
+  public String edit(Model model) {
+    model.addAttribute("currentIsAdmin", Utils.checkCurrentUserAdmin());
+    String userName = Utils.getUserNameFromSession();
+    // вообще такого быть не должно, но вдруг...
+    if (userName == null)
+      return "redirect:/login";
+    LoginEdit form = new LoginEdit(userName);
+    // автоматом сбрасываем флаг, дабы не зацикливать. Юзеру это ни к чему, а админ и так поставит.
+    form.setNeedChangePwd(false);
+    model.addAttribute("loginEdit", form);
     logger.info("GET to loginEdit");
     return "loginEdit";
   }
@@ -67,7 +87,6 @@ public class LoginController {
       return "login";
     } else {
       if (id != null) {
-        request.getSession().setAttribute(Consts.Web.userSessionName, id);
         logger.info("login OK redirect to book shelf");
         return "redirect:/shelf";
       } else {
@@ -88,4 +107,16 @@ public class LoginController {
     }
     return "redirect:/login";
   }
+
+  @PostMapping("/update")
+  public String update(@Validated LoginEdit loginEdit, BindingResult bindingResult) {
+    if (bindingResult.hasErrors()) {
+      return "loginEdit";
+    } else {
+      if (loginService.update(loginEdit) )
+        logger.info("New User was added");
+    }
+    return "redirect:/login";
+  }
+
 }

@@ -62,13 +62,14 @@
     <h2 th:text="#{book.title.bookDict}">Shelf</h2>
     <div id="bookList" class="container">
         <h3 th:text="#{book.title.addToDict}"></h3>
-        <form method="post" th:action="@{/books/save}" th:object="${book}">
+        <form method="post" th:action="@{/books/save}" th:object="${book}" enctype="multipart/form-data">
             <table border="1" cellpadding="2" cellspacing="2">
                 <thead>
                 <tr>
                     <th th:text="#{book.author}">author</th>
                     <th th:text="#{book.title}">title</th>
                     <th th:text="#{book.size}">size</th>
+                    <th th:text="#{book.file}">file</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -81,6 +82,9 @@
                     </td>
                     <td>
                         <input type="text" th:placeholder="#{book.size}" th:field="*{size}">
+                    </td>
+                    <td>
+                        <input type="file" th:value="#{book.file}" name="file">
                     </td>
                     <td>
                         <input type="submit" th:value="#{book.title.addToDict}">

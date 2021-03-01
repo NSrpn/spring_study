@@ -35,32 +35,32 @@ public class ShelfService {
     return allBooks;
   }
 
-  public void saveBook(Long userId, Long bookId) {
-    User u = UserStorage.getInstance().getById(userId);
+  public void saveBook(String userName, Long bookId) {
+    User u = UserStorage.getInstance().getByUserName(userName);
     Book b = BookStorage.getInstance().getById(bookId);
     UserBook ub = new UserBook(u, b);
     shelfRepo.save(ub);
     getAllBooks();
   }
 
-  public boolean removeBookById(Long userId, Long bookIdToRemove) {
+  public boolean removeBookById(String userName, Long bookIdToRemove) {
     List<UserBook> bookIds =
         allBooks.stream()
-          .filter(ub->ub.getBook().getId().equals(bookIdToRemove) && ub.getUser().getId().equals(userId))
+          .filter(ub->ub.getBook().getId().equals(bookIdToRemove) && ub.getUser().getUserName().equals(userName))
           .collect(Collectors.toList());
     shelfRepo.remove(bookIds);
     getAllBooks();
     return true;
   }
 
-  public List<Book> getBooksByUserId(String prefix, HttpSession session) {
+  public List<Book> getBooksByUserName(String prefix, HttpSession session) {
     Map<String, String> attrs = (Map<String, String>)session.getAttribute("filter");
-    Long userId = Utils.getUserIdFromSession(session);
+    String userName = Utils.getUserNameFromSession();
     return BookStorage.getInstance().getAllBooks()
                         .stream()
                         .filter(b -> b.getUsers()
                                       .stream()
-                                      .anyMatch(ub -> ub.getUser().getId().equals(userId)))
+                                      .anyMatch(ub -> ub.getUser().getUserName().equals(userName)))
                         .filter(b -> b.matchFilter(prefix, attrs))
                         .collect(Collectors.toList());
   }
@@ -69,7 +69,7 @@ public class ShelfService {
     if (allBooks == null) getAllBooks();
     Map<String, String> attrs =
         session.getAttribute("filter") != null ? (Map<String, String>)session.getAttribute("filter") : new HashMap<>();
-    attrs.put(Consts.Web.userSessionName, Utils.getUserIdFromSession(session).toString());
+    attrs.put(Consts.Web.userSessionName, Utils.getUserNameFromSession());
     return allBooks.stream().
             filter(ub -> ub.matchFilter(prefix, attrs)).collect(Collectors.toList());
   }

@@ -31,7 +31,7 @@
     </div>
     <br/>
     <div id="login_edit">
-      <form method="post" th:action="@{/login/register}" th:object="${loginEdit}">
+      <form method="post" th:object="${loginEdit}">
         <table>
           <tr>
             <td><input class="login_item" type="text" th:placeholder="#{login.fieldname.title}" th:field="*{title}"></td>
@@ -45,9 +45,17 @@
             <td><input class="login_item" type="password" th:placeholder="#{login.fieldname.password}" th:field="*{password}"></td>
             <td class="exc" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Generic Error</td>
           </tr>
+          <tr th:if="${currentIsAdmin}">
+            <td><input class="login_item" type="checkbox" th:text="#{login.fieldname.isadmin}" th:field="*{admin}"></td>
+          </tr>
+          <tr th:if="${currentIsAdmin}">
+            <td><input class="login_item" type="checkbox" th:text="#{login.fieldname.needchandepwd}" th:field="*{needChangePwd}"></td>
+          </tr>
         </table>
-        <br/>
-        <input class="login_item" type="submit" th:value="#{login.action.register}">
+        <div th:switch="${isNew}">
+          <input class="login_item" type="submit" th:case="1" th:value="#{login.action.register}" th:formaction="@{/login/register}">
+          <input class="login_item" type="submit" th:case="*" th:value="#{login.action.edit}" th:formaction="@{/login/update}">
+        </div>
       </form>
     </div>
   </div>

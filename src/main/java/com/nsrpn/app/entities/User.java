@@ -22,11 +22,11 @@ public class User extends BaseEntity {
   @Column(nullable = false)
   private String pwd;
 
-  public User(Long id, String title, String userName, String pwd) {
-    super(id, title);
-    this.userName = userName;
-    this.pwd = pwd;
-  }
+  @Column
+  private String role;
+
+  @Column
+  private Boolean needPwdChange;
 
   public User() {
     super();
@@ -48,4 +48,19 @@ public class User extends BaseEntity {
     this.pwd = pwd;
   }
 
+  public String getRole() {
+    return role;
+  }
+
+  public void setRole(String role) {
+    this.role = role;
+  }
+
+  public Boolean getNeedPwdChange() {
+    return needPwdChange;
+  }
+
+  public void setNeedPwdChange(Boolean needPwdChange) {
+    this.needPwdChange = needPwdChange;
+  }
 }

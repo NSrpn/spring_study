@@ -4,6 +4,7 @@
         <nav th:fragment="menu">
             <a th:href="@{/shelf}" th:text="#{book.title.shelf}"></a>
             <a th:href="@{/books}" th:text="#{book.title.bookDict}"></a>
+            <a th:if="${currentIsAdmin}" th:href="@{/login/register}" th:text="#{login.title.registration}"></a>
         </nav>
     </body>
 </html>

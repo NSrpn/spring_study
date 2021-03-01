@@ -36,10 +36,15 @@
           <td class="exc" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Generic Error</td>
         </tr>
       </table>
-      <input class="login_item" type="submit" th:value="#{login.action.login}"> <a th:href="@{/login/register}" th:text="#{login.action.register}" />
+      <input class="login_item" type="submit" th:value="#{login.action.login}" /> <a th:href="@{/login/register}" th:text="#{login.action.register}" />
       <br/>
       <div th:if="${#fields.hasErrors('global')}">
         <p class="exc" th:each="err : ${#fields.errors('global')}" th:text="${err}">Exception</p>
+      </div>
+      <div th:if="${session['SPRING_SECURITY_LAST_EXCEPTION']}">
+        <p class="exc" th:with="errorMsg=${session['SPRING_SECURITY_LAST_EXCEPTION'].message}">
+          <br/><span th:text="${errorMsg}">Wrong input!</span>
+        </p>
       </div>
     </form>
   </div>

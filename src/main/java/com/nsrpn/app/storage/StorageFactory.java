@@ -1,6 +1,7 @@
 package com.nsrpn.app.storage;
 
 import com.nsrpn.app.entities.Book;
+import com.nsrpn.app.entities.Files;
 import com.nsrpn.app.entities.User;
 import com.nsrpn.app.entities.UserBook;
 import org.hibernate.SessionFactory;
@@ -20,6 +21,7 @@ public class StorageFactory {
         configuration.addAnnotatedClass(Book.class);
         configuration.addAnnotatedClass(User.class);
         configuration.addAnnotatedClass(UserBook.class);
+        configuration.addAnnotatedClass(Files.class);
         StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties());
         sessionFactory = configuration.buildSessionFactory(builder.build());
 

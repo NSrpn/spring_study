@@ -11,6 +11,14 @@
                        th:formaction="@{/shelf/remove?book_id=} + ${book.id}">
             </label>
         </span>
+        <span>
+            <label th:title="#{book.action.download}">
+                <input type="image"
+                       th:alt="#{book.action.download}"
+                       th:src="@{/images/download.png}"
+                       th:formaction="@{/shelf/download?book_id=} + ${book.id}">
+            </label>
+        </span>
     </div>
     <div style="display: none;" th:fragment="filterActionList">
         <span>

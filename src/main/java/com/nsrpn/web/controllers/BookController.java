@@ -1,6 +1,7 @@
 package com.nsrpn.web.controllers;
 
 import com.nsrpn.app.entities.Book;
+import com.nsrpn.app.files.FileStorageConfiguration;
 import com.nsrpn.app.services.BookService;
 import com.nsrpn.app.services.ShelfService;
 import com.nsrpn.app.utils.Consts;
@@ -15,11 +16,12 @@ import org.springframework.validation.ObjectError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @Controller
@@ -35,6 +37,9 @@ public class BookController {
   BooksValidator booksValidator;
 
   @Autowired
+  FileStorageConfiguration fileStorageFactory;
+
+  @Autowired
   public BookController(BookService bookService, ShelfService shelfService) {
     this.bookService = bookService;
     this.shelfService = shelfService;
@@ -48,8 +53,8 @@ public class BookController {
   @GetMapping
   public String booksDict(Model model, HttpSession session) {
     logger.info("got book dict");
-    if (Utils.checkSession(session)) return "redirect:/login";
-    logger.info("user_id=" + Utils.getUserIdFromSession(session).toString());
+    if (Utils.checkSession()) return "redirect:/login";
+    logger.info("user_id=" + Utils.getUserNameFromSession().toString());
     model.addAttribute("book", new Book());
     model.addAttribute("filter", session.getAttribute("filter") != null ? session.getAttribute("filter") : Book.getFilter(contentPage, null));
     prepareCommonModelForIndex(model, session);
@@ -57,19 +62,23 @@ public class BookController {
   }
 
   @PostMapping("/save")
-  public String saveBook(Model model, @Validated Book book, BindingResult result, HttpServletRequest request) {
+  public String saveBook(Model model, @Validated Book book, @RequestParam("file") MultipartFile file,
+                         BindingResult result, HttpServletRequest request) throws IOException {
     if (result.hasErrors()) {
       model.addAttribute("filter", Book.getFilter(contentPage, request));
       prepareCommonModelForIndex(model, request.getSession());
       return "index";
-    } else
+    } else {
       bookService.saveBook(book);
+      if (file != null && !file.isEmpty())
+        fileStorageFactory.getFileStorage().saveFile(book, file);
+    }
     return "redirect:/books";
   }
 
   @PostMapping("/remove")
   public String removeBook(Book book, BindingResult bindingResult, HttpServletRequest request) {
-    if (Utils.checkSession(request)) return "redirect:/login";
+    if (Utils.checkSession()) return "redirect:/login";
     if (!bookService.removeBookById(Long.parseLong(request.getParameter("book_id")))) {
       bindingResult.addError(new ObjectError("Book", "Error due delete"));
     }
@@ -78,21 +87,21 @@ public class BookController {
 
   @PostMapping("/addToShelf")
   public String addBookToShelf(Book book, BindingResult bindingResult, HttpServletRequest request) {
-    if (Utils.checkSession(request)) return "redirect:/login";
+    if (Utils.checkSession()) return "redirect:/login";
     AddToShelf(Long.parseLong(request.getParameter("book_id")), bindingResult, request);
     return "redirect:/books";
   }
 
   @PostMapping("/filter")
   public String filter(Book book, HttpServletRequest request) {
-    if (Utils.checkSession(request)) return "redirect:/login";
+    if (Utils.checkSession()) return "redirect:/login";
     Utils.setFilterToSession(contentPage, request);
     return "redirect:/books";
   }
 
   @PostMapping("/addToShelfFiltered")
   public String addToShelfFiltered(Book book, BindingResult bindingResult, HttpServletRequest request) {
-    if (Utils.checkSession(request)) return "redirect:/login";
+    if (Utils.checkSession()) return "redirect:/login";
     Utils.setFilterToSession(contentPage, request);
     List<Book> books = bookService.getFiltered(contentPage, request.getSession());
     for (Book b : books) {
@@ -103,7 +112,7 @@ public class BookController {
 
   @PostMapping("/removeFiltered")
   public String removeFiltered(Book Book, HttpServletRequest request) {
-    if (Utils.checkSession(request)) return "redirect:/login";
+    if (Utils.checkSession()) return "redirect:/login";
     Utils.setFilterToSession(contentPage, request);
     for (Book b : bookService.getFiltered(contentPage, request.getSession())) {
       bookService.removeBookById(b.getId());
@@ -115,7 +124,7 @@ public class BookController {
   private void AddToShelf(Long book_id, BindingResult bindingResult, HttpServletRequest request) {
     try {
       shelfService.saveBook(
-          Utils.getUserIdFromSession(request.getSession()),
+          Utils.getUserNameFromSession(),
           book_id
       );
     } catch (Exception e) {
@@ -128,6 +137,7 @@ public class BookController {
   }
 
   private void prepareCommonModelForIndex(Model model, HttpSession session) {
+    model.addAttribute("currentIsAdmin", Utils.checkCurrentUserAdmin());
     model.addAttribute("content", contentPage);
     List<Book> books = bookService.getFiltered(contentPage, session);
     model.addAttribute("bookList", books);
@@ -135,7 +145,7 @@ public class BookController {
         books.stream().collect(
             Collectors.toMap(
                 b -> b.getId(),
-                b -> b.getUsers().stream().map(ub -> ub.getUser().getId()).collect(Collectors.toList())
+                b -> b.getUsers().stream().map(ub -> ub.getUser().getUserName()).collect(Collectors.toList())
             )
         )
     );
