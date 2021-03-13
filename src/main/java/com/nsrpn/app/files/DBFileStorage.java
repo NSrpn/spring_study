@@ -21,9 +21,15 @@ public class DBFileStorage implements FileStorage {
   }
 
   @Override
-  public byte[] getFile(BaseEntity entity) {
+  public Files getFile(BaseEntity entity) {
     DBFilesStorage storage = new DBFilesStorage();
-    Files file = storage.getByEntity(entity.getClass().getName(), entity.getId());
+    return storage.getByEntity(entity.getClass().getName(), entity.getId());
+  }
+
+  @Override
+  public byte[] getFileDataByte(Files file) {
     return file != null ? Base64.getDecoder().decode(file.getFileData()) : null;
   }
+
+
 }

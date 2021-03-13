@@ -1,6 +1,7 @@
 package com.nsrpn.app.config;
 
 import com.nsrpn.app.services.LoginService;
+import com.nsrpn.app.exceptions.AuthFailureHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,6 +18,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
   @Autowired
   private LoginService userDetailsService;
+
+  @Autowired
+  private AuthFailureHandler authFailureHandler;
 
   @Override
   protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -39,7 +43,7 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
           .loginPage("/login")
           .loginProcessingUrl("/login/auth")
           .defaultSuccessUrl("/shelf", true)
-          .failureUrl("/login");
+          .failureHandler(authFailureHandler);
   }
 
   @Override

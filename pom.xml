@@ -10,8 +10,7 @@
   <packaging>war</packaging>
 
   <name>study-mvc Maven Webapp</name>
-  <!-- FIXME change it to the project's website -->
-  <url>http://www.example.com</url>
+  <url>http://localhost:8089</url>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -62,6 +61,12 @@
     </dependency>
 
     <dependency>
+      <groupId>javax.validation</groupId>
+      <artifactId>validation-api</artifactId>
+      <version>2.0.1.Final</version>
+    </dependency>
+
+    <dependency>
       <groupId>org.thymeleaf</groupId>
       <artifactId>thymeleaf-spring5</artifactId>
       <version>3.0.12.RELEASE</version>
@@ -102,7 +107,6 @@
       <artifactId>commons-io</artifactId>
       <version>2.2</version>
     </dependency>
-
   </dependencies>
 
   <build>
@@ -138,18 +142,6 @@
           <artifactId>maven-deploy-plugin</artifactId>
           <version>2.8.2</version>
         </plugin>
-        <plugin>
-          <groupId>org.eclipse.jetty</groupId>
-          <artifactId>jetty-maven-plugin</artifactId>
-          <version>${jetty.version}</version>
-          <configuration>
-            <scanIntervalSeconds>2</scanIntervalSeconds>
-            <webApp>
-              <contextPath>/</contextPath>
-            </webApp>
-          </configuration>
-        </plugin>
-
       </plugins>
     </pluginManagement>
   </build>

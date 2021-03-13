@@ -3,9 +3,13 @@ package com.nsrpn.web.forms;
 import com.nsrpn.app.entities.User;
 import com.nsrpn.app.storage.UserStorage;
 
+import javax.validation.constraints.NotEmpty;
+
 public class LoginEdit extends LoginForm {
 
+  @NotEmpty (message = "Необходимо заполнить поле ФИО")
   private String title;
+
   private String role;
   private Boolean admin;
   private Boolean needChangePwd;

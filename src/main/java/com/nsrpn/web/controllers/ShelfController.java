@@ -1,7 +1,10 @@
 package com.nsrpn.web.controllers;
 
 import com.nsrpn.app.entities.Book;
+import com.nsrpn.app.entities.Files;
 import com.nsrpn.app.entities.UserBook;
+import com.nsrpn.app.exceptions.UserException;
+import com.nsrpn.app.files.FileStorage;
 import com.nsrpn.app.files.FileStorageConfiguration;
 import com.nsrpn.app.services.ShelfService;
 import com.nsrpn.app.storage.BookStorage;
@@ -10,6 +13,7 @@ import com.nsrpn.app.utils.Utils;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -97,17 +101,19 @@ public class ShelfController {
     return "redirect:/shelf";
   }
 
-  @GetMapping("/download")
-  public void getFile(@RequestParam("book_id") Long bookId, HttpServletResponse response) {
+  @PostMapping("/download")
+  public void getFile(Book book, HttpServletRequest request, HttpServletResponse response) throws UserException {
     try {
-      InputStream is =
-          new ByteArrayInputStream(
-              fileStorageConfiguration.getFileStorage().getFile(
-                  BookStorage.getInstance().getById(bookId)
-              )
-          );
-      IOUtils.copy(is, response.getOutputStream());
-      response.flushBuffer();
+      FileStorage fs = fileStorageConfiguration.getFileStorage();
+      Files file = fs.getFile(BookStorage.getInstance().getById(Long.parseLong(request.getParameter("book_id"))));
+      if (file != null) {
+        response.addHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getTitle() + "\"");
+        InputStream is = new ByteArrayInputStream(fs.getFileDataByte(file));
+        IOUtils.copy(is, response.getOutputStream());
+        response.flushBuffer();
+      } else {
+        throw new UserException("Файл не найден. Обратитесь к администратору.");
+      }
     } catch (IOException ex) {
       throw new RuntimeException("IOError writing file to output stream");
     }

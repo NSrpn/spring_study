@@ -61,6 +61,7 @@
     <div th:insert="templates/menu::menu" />
     <h2 th:text="#{book.title.bookDict}">Shelf</h2>
     <div id="bookList" class="container">
+        <div th:if="${currentIsAdmin}" >
         <h3 th:text="#{book.title.addToDict}"></h3>
         <form method="post" th:action="@{/books/save}" th:object="${book}" enctype="multipart/form-data">
             <table border="1" cellpadding="2" cellspacing="2">
@@ -102,6 +103,7 @@
                 <span th:text="#{book.size} + ': '" /><span th:errors="*{size}" />
             </div>
         </form>
+        </div>
         <h3 th:text="#{book.title.bookDict}"></h3>
         <div th:insert="templates/bookList::bookList" />
     </div>

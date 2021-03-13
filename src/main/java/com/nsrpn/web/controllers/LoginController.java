@@ -1,9 +1,6 @@
 package com.nsrpn.web.controllers;
 
-import com.nsrpn.app.entities.User;
 import com.nsrpn.app.services.LoginService;
-import com.nsrpn.app.storage.UserStorage;
-import com.nsrpn.app.utils.Consts;
 import com.nsrpn.app.utils.Utils;
 import com.nsrpn.web.forms.LoginEdit;
 import com.nsrpn.web.forms.LoginForm;
@@ -16,11 +13,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-
+import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -118,5 +111,4 @@ public class LoginController {
     }
     return "redirect:/login";
   }
-
 }

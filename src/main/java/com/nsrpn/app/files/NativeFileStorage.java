@@ -33,14 +33,19 @@ public class NativeFileStorage implements FileStorage {
   }
 
   @Override
-  public byte[] getFile(BaseEntity entity) {
+  public Files getFile(BaseEntity entity) {
     DBFilesStorage storage = new DBFilesStorage();
     Files fileEntity = storage.getByEntity(entity.getClass().getName(), entity.getId());
-    if (fileEntity != null) {
-      File file = new File(fileEntity.getFileData());
-      if (file.exists()) {
+    return (fileEntity != null && (new File(fileEntity.getFileData()).exists())) ? fileEntity : null;
+  }
+
+  @Override
+  public byte[] getFileDataByte(Files file) {
+    {
+      File fileData = new File(file.getFileData());
+      if (fileData.exists()) {
         try {
-          return FileUtils.readFileToByteArray(file);
+          return FileUtils.readFileToByteArray(fileData);
         } catch (IOException e) {
           return null;
         }

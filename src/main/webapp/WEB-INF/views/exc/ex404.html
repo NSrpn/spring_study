@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Error</title>
+    <style>
+    .exc {
+      margin-bottom: 10px;
+      color: red;
+      align: center;
+    }
+  </style>
+</head>
+<body>
+<div id="error">
+    <div>
+        <table style="border: none;">
+        <tr>
+            <td>
+                <img th:src="@{/images/error.png}">
+            </td>
+            <td>
+                <h1 th:text="#{exception.page.header}"></h1>
+            </td>
+        </tr>
+        </table>
+    </div>
+    <div th:if="${not #sets.isEmpty(errorList)}">
+        <p class="exc" th:each="error : ${errorList}" th:text="${error.getDefaultMessage()}">Exception</p>
+    </div>
+    <div>
+        <p class="exc" th:text="${errorMessage}">Exception</p>
+    </div>
+    <br/>
+    <a th:href="${backPage}" th:text="#{exception.page.back}" />
+</div>
+</body>
+</html>

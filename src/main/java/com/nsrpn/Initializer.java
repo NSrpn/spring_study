@@ -1,7 +1,6 @@
 package com.nsrpn;
 
 import com.nsrpn.app.config.AppContextConfig;
-import com.nsrpn.app.config.AppSecurityConfig;
 import com.nsrpn.web.config.WebContextConfig;
 import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.ContextLoaderListener;

@@ -1,7 +1,12 @@
 package com.nsrpn.web.forms;
 
+import javax.validation.constraints.NotEmpty;
+
 public class LoginForm {
+
+  @NotEmpty (message = "Необходимо заполнить поле Пользователь")
   private String username;
+  @NotEmpty (message = "Необходимо заполнить поле Пароль")
   private String password;
 
   public LoginForm(String username, String password) {
