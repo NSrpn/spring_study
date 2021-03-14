@@ -17,11 +17,13 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.support.DefaultMultipartHttpServletRequest;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Controller
@@ -62,16 +64,19 @@ public class BookController {
   }
 
   @PostMapping("/save")
-  public String saveBook(Model model, @Validated Book book, @RequestParam("file") MultipartFile file,
-                         BindingResult result, HttpServletRequest request) throws IOException {
+  public String saveBook(Model model, @Validated Book book, BindingResult result,
+                         DefaultMultipartHttpServletRequest request) throws IOException {
     if (result.hasErrors()) {
       model.addAttribute("filter", Book.getFilter(contentPage, request));
       prepareCommonModelForIndex(model, request.getSession());
       return "index";
     } else {
       bookService.saveBook(book);
-      if (file != null && !file.isEmpty())
-        fileStorageFactory.getFileStorage().saveFile(book, file);
+      if (!request.getFileMap().isEmpty()) {
+        MultipartFile file = request.getFile("file");
+        if (file != null && !file.isEmpty())
+          fileStorageFactory.getFileStorage().saveFile(book, file);
+      }
     }
     return "redirect:/books";
   }
